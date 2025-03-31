@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <title>Clay Journal - Daily Writing Companion</title>
+  <style>
+    :root {
+      /* Custom colors */
+      --clay-50: #f9f7f4;
+      --clay-100: #f5f0e8;
+      --clay-200: #e9ded0;
+      --clay-300: #d1bdaa;
+      --clay-400: #b6a18c;
+      --clay-500: #9e8777;
+      --clay-600: #866f60;
+      --clay-700: #6d5a4e;
+      --clay-800: #4a3f35;
+      --clay-900: #292420;
+      
+      --sage-300: #a3b492;
+      --sage-400: #8a9e7b;
+      
+      --amber-300: #e4c28e;
+      --amber-400: #d9ad77;
+    }
+    
+    * {
+      font-family: 'Inter', sans-serif;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Fraunces', serif;
+    }
+    
+    /* Custom scrollbar */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: var(--clay-100);
+      border-radius: 10px;
+    }
+    
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: var(--clay-300);
+      border-radius: 10px;
+    }
+    
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: var(--clay-400);
+    }
+    
+    /* Stylesheet for prose content */
+    .prose-clay {
+      color: var(--clay-700);
+    }
+    
+    .prose-clay p {
+      margin-bottom: 1rem;
+    }
+    
+    /* Animation for entry cards */
+    .entry-card {
+      transition: all 0.3s ease;
+    }
+    
+    .entry-card:hover {
+      transform: translateY(-3px);
+    }
+    
+    /* Animation for streak dots */
+    .streak-dot {
+      transition: transform 0.2s ease;
+    }
+    
+    .streak-dot:hover {
+      transform: scale(1.15);
+    }
+    
+    /* Calendar styling */
+    .calendar-day {
+      aspect-ratio: 1/1;
+      transition: all 0.2s ease;
+    }
+    
+    .calendar-day:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+</html>
