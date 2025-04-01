@@ -135,114 +135,129 @@ export default function NewEntryDialog({ open, onOpenChange }: NewEntryDialogPro
   
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-2xl bg-clay-50 border-clay-200">
+      <DialogContent className="sm:max-w-3xl bg-clay-50 border-clay-200">
         <DialogHeader>
-          <DialogTitle className="font-serif text-xl text-clay-800">New Journal Entry</DialogTitle>
+          <DialogTitle className="font-serif text-2xl text-clay-800">New Journal Entry</DialogTitle>
         </DialogHeader>
         
-        <div className="space-y-4 mt-2">
-          <div>
-            <label htmlFor="entry-title" className="block text-sm font-medium text-clay-700 mb-1">
-              Title
-            </label>
-            <Input
-              id="entry-title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Give your entry a title..."
-              className="bg-white border-clay-200"
-            />
+        {/* Journal Page Preview */}
+        <div className="bg-white border border-clay-200 rounded-lg shadow-sm overflow-hidden">
+          <div className="p-6 bg-clay-100 border-b border-clay-200">
+            {/* Title */}
+            <div className="mb-4">
+              <label htmlFor="entry-title" className="block text-sm font-medium text-clay-700 mb-2">
+                Entry Title
+              </label>
+              <Input
+                id="entry-title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Give your entry a title..."
+                className="bg-white border-clay-200 text-xl font-serif"
+              />
+            </div>
+            
+            {/* Metadata */}
+            <div className="flex flex-wrap gap-4">
+              {/* Mood */}
+              <div>
+                <label className="block text-sm font-medium text-clay-700 mb-2">
+                  Mood
+                </label>
+                <div className="flex gap-2">
+                  {moods.map(mood => (
+                    <TooltipProvider key={mood.name}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            type="button"
+                            variant={selectedMood === mood.name ? "default" : "outline"}
+                            onClick={() => setSelectedMood(mood.name)}
+                            className={`p-2 text-xl ${selectedMood === mood.name 
+                              ? "bg-clay-300 hover:bg-clay-400 text-clay-800 border-clay-300" 
+                              : "border-clay-300 text-clay-700"
+                            }`}
+                            size="icon"
+                          >
+                            {mood.emoji}
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p className="capitalize">{mood.name}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Tags */}
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-clay-700 mb-2">
+                  Tags
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {tags?.map(tag => (
+                    <Button
+                      key={tag.id}
+                      type="button"
+                      variant={selectedTags.includes(tag.id) ? "default" : "outline"}
+                      onClick={() => toggleTag(tag.id)}
+                      className={selectedTags.includes(tag.id) 
+                        ? "bg-clay-300 hover:bg-clay-400 text-clay-800 border-clay-300" 
+                        : "border-clay-300 text-clay-700"
+                      }
+                      size="sm"
+                    >
+                      {tag.name}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
           
-          <div>
-            <label htmlFor="entry-content" className="block text-sm font-medium text-clay-700 mb-1">
+          {/* Content */}
+          <div className="p-6 bg-[#fffdf8]">
+            <label htmlFor="entry-content" className="block text-sm font-medium text-clay-700 mb-2">
               Today's thoughts
             </label>
             <Textarea
               id="entry-content"
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              placeholder="What's on your mind today?"
-              className="min-h-[200px] bg-white border-clay-200"
-              rows={8}
+              placeholder="What's on your mind today? Write freely and reflect on your experiences, thoughts, and feelings..."
+              className="min-h-[300px] bg-[#fffdf8] border-clay-200 p-4 text-clay-800 text-lg leading-relaxed font-serif"
+              rows={10}
             />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-clay-700 mb-2">
-              Tags
-            </label>
-            <div className="flex flex-wrap gap-2">
-              {tags?.map(tag => (
-                <Button
-                  key={tag.id}
-                  type="button"
-                  variant={selectedTags.includes(tag.id) ? "default" : "outline"}
-                  onClick={() => toggleTag(tag.id)}
-                  className={selectedTags.includes(tag.id) 
-                    ? "bg-clay-300 hover:bg-clay-400 text-clay-800 border-clay-300" 
-                    : "border-clay-300 text-clay-700"
-                  }
-                  size="sm"
-                >
-                  {tag.name}
-                </Button>
-              ))}
+            
+            <div className="mt-4 text-clay-500 text-sm italic">
+              Writing consistently helps build valuable self-reflection habits and creates a meaningful record of your journey.
             </div>
           </div>
           
-          <div>
-            <label className="block text-sm font-medium text-clay-700 mb-2">
-              Mood
-            </label>
-            <div className="flex space-x-4">
-              {moods.map(mood => (
-                <TooltipProvider key={mood.name}>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        type="button"
-                        variant={selectedMood === mood.name ? "default" : "outline"}
-                        onClick={() => setSelectedMood(mood.name)}
-                        className={`p-2 text-xl ${selectedMood === mood.name 
-                          ? "bg-clay-300 hover:bg-clay-400 text-clay-800 border-clay-300" 
-                          : "border-clay-300 text-clay-700"
-                        }`}
-                        size="icon"
-                      >
-                        {mood.emoji}
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p className="capitalize">{mood.name}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              ))}
-            </div>
+          {/* Footer */}
+          <div className="p-4 bg-clay-100 border-t border-clay-200 flex justify-between items-center">
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={() => onOpenChange(false)}
+              className="border-clay-300 text-clay-700"
+            >
+              <X className="mr-2 h-4 w-4" />
+              Cancel
+            </Button>
+            <Button 
+              type="button" 
+              onClick={handleSubmit}
+              disabled={createEntryMutation.isPending}
+              className="bg-clay-300 hover:bg-clay-400 text-clay-800"
+            >
+              <Save className="mr-2 h-4 w-4" />
+              {createEntryMutation.isPending ? "Saving..." : "Save Entry"}
+            </Button>
           </div>
         </div>
-        
-        <DialogFooter className="mt-4">
-          <Button 
-            type="button" 
-            variant="outline" 
-            onClick={() => onOpenChange(false)}
-            className="border-clay-300 text-clay-700"
-          >
-            <X className="mr-2 h-4 w-4" />
-            Cancel
-          </Button>
-          <Button 
-            type="button" 
-            onClick={handleSubmit}
-            disabled={createEntryMutation.isPending}
-            className="bg-clay-300 hover:bg-clay-400 text-clay-800"
-          >
-            <Save className="mr-2 h-4 w-4" />
-            {createEntryMutation.isPending ? "Saving..." : "Save Entry"}
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

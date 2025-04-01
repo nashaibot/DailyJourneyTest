@@ -15,12 +15,11 @@ import { AuthProvider } from "@/hooks/use-auth";
 function Router() {
   return (
     <Switch>
-      <Route path="/auth" component={AuthPage} />
-      <ProtectedRoute path="/" component={HomePage} />
-      <ProtectedRoute path="/journal" component={JournalPage} />
-      <ProtectedRoute path="/entry/:id" component={EntryPage} />
-      <ProtectedRoute path="/calendar" component={CalendarPage} />
-      <ProtectedRoute path="/stats" component={StatsPage} />
+      <Route path="/" component={HomePage} />
+      <Route path="/journal" component={JournalPage} />
+      <Route path="/entry/:id" component={EntryPage} />
+      <Route path="/calendar" component={CalendarPage} />
+      <Route path="/stats" component={StatsPage} />
       <Route component={NotFound} />
     </Switch>
   );

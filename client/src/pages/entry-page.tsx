@@ -39,7 +39,7 @@ export default function EntryPage() {
   // Get entry data
   const { data: entry, isLoading, error } = useQuery<EntryWithTags>({
     queryKey: [`/api/entries/${entryId}`],
-    onSuccess: (data) => {
+    onSuccess: (data: EntryWithTags) => {
       setTitle(data.title);
       setContent(data.content);
     }
@@ -163,7 +163,7 @@ export default function EntryPage() {
         
         {/* Entry content */}
         <div className="flex-1 px-4 sm:px-8 py-6 overflow-auto">
-          <div className="max-w-3xl mx-auto">
+          <div className="max-w-4xl mx-auto">
             {/* Entry header */}
             <div className="mb-6 flex items-center justify-between">
               <Button
@@ -172,7 +172,7 @@ export default function EntryPage() {
                 className="text-clay-700 hover:bg-clay-200"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Back
+                Back to Journal
               </Button>
               
               <div className="flex items-center space-x-2">
@@ -209,15 +209,15 @@ export default function EntryPage() {
                       <Trash className="h-4 w-4" />
                     </Button>
                   </AlertDialogTrigger>
-                  <AlertDialogContent>
+                  <AlertDialogContent className="bg-clay-50 border-clay-200">
                     <AlertDialogHeader>
-                      <AlertDialogTitle>Delete entry?</AlertDialogTitle>
-                      <AlertDialogDescription>
+                      <AlertDialogTitle className="text-clay-800">Delete entry?</AlertDialogTitle>
+                      <AlertDialogDescription className="text-clay-600">
                         This action cannot be undone. This will permanently delete your journal entry.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogCancel className="border-clay-200 text-clay-700">Cancel</AlertDialogCancel>
                       <AlertDialogAction
                         onClick={handleDelete}
                         className="bg-red-500 hover:bg-red-600"
@@ -230,59 +230,90 @@ export default function EntryPage() {
               </div>
             </div>
             
-            {/* Entry title */}
-            {isEditing ? (
-              <div className="mb-6">
-                <Input
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="Entry title"
-                  className="text-xl font-serif font-medium bg-white border-clay-200 mb-2"
-                />
-              </div>
-            ) : (
-              <h1 className="font-serif text-2xl sm:text-3xl font-medium text-clay-800 mb-2">
-                {entry.title}
-              </h1>
-            )}
-            
-            {/* Entry metadata */}
-            <div className="flex items-center text-clay-500 text-sm mb-6">
-              <span>{format(new Date(entry.createdAt), 'MMMM d, yyyy')}</span>
-              {entry.tags && entry.tags.length > 0 && (
-                <>
-                  <span className="mx-2">•</span>
-                  <div className="flex flex-wrap gap-2">
-                    {entry.tags.map((tag) => (
-                      <span 
-                        key={tag.id} 
-                        className="px-2 py-1 bg-clay-100 text-clay-600 rounded-full text-xs"
-                      >
-                        {tag.name}
+            {/* Journal Page */}
+            <div className="bg-white border border-clay-200 rounded-xl shadow-sm overflow-hidden">
+              <div className="p-8 bg-clay-100 border-b border-clay-200">
+                {/* Entry title */}
+                {isEditing ? (
+                  <div className="mb-4">
+                    <Input
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      placeholder="Entry title"
+                      className="text-2xl font-serif font-medium bg-white border-clay-200"
+                    />
+                  </div>
+                ) : (
+                  <h1 className="font-serif text-2xl sm:text-3xl font-medium text-clay-800 mb-4">
+                    {entry.title}
+                  </h1>
+                )}
+                
+                {/* Entry metadata */}
+                <div className="flex flex-wrap items-center text-clay-600 text-sm">
+                  <span className="font-medium">{format(new Date(entry.createdAt), 'MMMM d, yyyy')}</span>
+                  
+                  {entry.mood && (
+                    <>
+                      <span className="mx-2">•</span>
+                      <span className="flex items-center">
+                        <span className="mr-1">Mood:</span>
+                        <span className="capitalize">
+                          {entry.mood === "happy" && "😊 Happy"}
+                          {entry.mood === "neutral" && "😐 Neutral"}
+                          {entry.mood === "sad" && "😔 Sad"}
+                          {entry.mood === "angry" && "😡 Angry"}
+                          {entry.mood === "tired" && "😴 Tired"}
+                        </span>
                       </span>
+                    </>
+                  )}
+                  
+                  {entry.tags && entry.tags.length > 0 && (
+                    <>
+                      <span className="mx-2">•</span>
+                      <div className="flex flex-wrap gap-2">
+                        {entry.tags.map((tag) => (
+                          <span 
+                            key={tag.id} 
+                            className="px-2 py-1 bg-clay-200 text-clay-700 rounded-full text-xs"
+                          >
+                            {tag.name}
+                          </span>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+              
+              {/* Entry content */}
+              <div className="p-8 bg-[#fffdf8] min-h-[50vh]">
+                {isEditing ? (
+                  <Textarea
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    placeholder="Write your thoughts here..."
+                    className="min-h-[400px] bg-[#fffdf8] border-clay-200 p-4 text-clay-800 text-lg leading-relaxed font-serif"
+                  />
+                ) : (
+                  <div className="prose prose-clay max-w-none font-serif">
+                    {content.split('\n').map((paragraph, index) => (
+                      paragraph ? (
+                        <p key={index} className="mb-6 text-clay-800 leading-relaxed text-lg">
+                          {paragraph}
+                        </p>
+                      ) : <br key={index} />
                     ))}
                   </div>
-                </>
-              )}
-            </div>
-            
-            {/* Entry content */}
-            {isEditing ? (
-              <Textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                placeholder="Write your thoughts here..."
-                className="min-h-[300px] bg-white border-clay-200"
-              />
-            ) : (
-              <div className="prose prose-clay max-w-none">
-                {content.split('\n').map((paragraph, index) => (
-                  <p key={index} className="mb-4 text-clay-700 leading-relaxed">
-                    {paragraph}
-                  </p>
-                ))}
+                )}
               </div>
-            )}
+              
+              {/* Journal footer */}
+              <div className="p-4 bg-clay-100 border-t border-clay-200 text-clay-500 text-sm text-center italic">
+                Clay Journal • Your words, your journey
+              </div>
+            </div>
           </div>
         </div>
         
