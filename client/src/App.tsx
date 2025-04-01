@@ -7,6 +7,7 @@ import HomePage from "@/pages/home-page";
 import AuthPage from "@/pages/auth-page";
 import JournalPage from "@/pages/journal-page";
 import EntryPage from "@/pages/entry-page";
+import NewEntryPage from "@/pages/new-entry-page";
 import CalendarPage from "@/pages/calendar-page";
 import StatsPage from "@/pages/stats-page";
 import { ProtectedRoute } from "./lib/protected-route";
@@ -17,6 +18,7 @@ function Router() {
     <Switch>
       <Route path="/" component={HomePage} />
       <Route path="/journal" component={JournalPage} />
+      <Route path="/entry/new" component={NewEntryPage} />
       <Route path="/entry/:id" component={EntryPage} />
       <Route path="/calendar" component={CalendarPage} />
       <Route path="/stats" component={StatsPage} />

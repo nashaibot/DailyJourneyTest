@@ -1,20 +1,20 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 import Sidebar from "@/components/layout/sidebar";
 import MobileNav from "@/components/layout/mobile-nav";
 import EntryCard from "@/components/journal/entry-card";
-import NewEntryDialog from "@/components/journal/new-entry-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Entry } from "@shared/schema";
+import { EntryWithTags } from "@shared/schema";
 import { Plus, Search } from "lucide-react";
 
 export default function JournalPage() {
+  const [_, navigate] = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
-  const [showNewEntryDialog, setShowNewEntryDialog] = useState(false);
   
   // Get all entries
-  const { data: entries, isLoading } = useQuery<Entry[]>({
+  const { data: entries, isLoading } = useQuery<EntryWithTags[]>({
     queryKey: ["/api/entries"],
   });
   
@@ -52,7 +52,7 @@ export default function JournalPage() {
                 </div>
                 <div className="mt-4 sm:mt-0">
                   <Button 
-                    onClick={() => setShowNewEntryDialog(true)}
+                    onClick={() => navigate("/entry/new")}
                     className="inline-flex items-center px-4 py-2 rounded-full bg-clay-300 hover:bg-clay-400 text-clay-800 font-medium"
                   >
                     <Plus className="mr-2 h-4 w-4" />
@@ -102,7 +102,7 @@ export default function JournalPage() {
               <div className="text-center p-8 bg-white rounded-xl shadow-sm">
                 <p className="text-clay-600 mb-4">No journal entries yet. Start writing today!</p>
                 <Button 
-                  onClick={() => setShowNewEntryDialog(true)}
+                  onClick={() => navigate("/entry/new")}
                   className="bg-clay-300 hover:bg-clay-400 text-clay-800"
                 >
                   Create your first entry
@@ -114,11 +114,6 @@ export default function JournalPage() {
         
         <MobileNav />
       </main>
-      
-      <NewEntryDialog 
-        open={showNewEntryDialog} 
-        onOpenChange={setShowNewEntryDialog} 
-      />
     </div>
   );
 }
